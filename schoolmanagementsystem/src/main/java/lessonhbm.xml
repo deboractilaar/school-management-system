@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="com.bean.Lesson" table="lesson">
+		<id name="id">
+			<generator class="increment"></generator>
+		</id>
+		<property name="date"></property>
+		<property name="startTime"><column name="start_time"></column></property>
+		<property name="endTime"><column name="end_time"></column></property>
+		<property name="classRoom"><column name="class_room"></column></property>
+		<many-to-one name="course" class="com.bean.Course" fetch="select" column="course_id" not-null="true"/>
+		<set name="attendances" table="attendance" fetch="select" inverse="true" cascade="delete">
+			<key>
+				<column name="lesson_id"></column>
+			</key>
+			<one-to-many class="com.bean.Attendance"/>
+		</set>
+	</class>
+</hibernate-mapping>

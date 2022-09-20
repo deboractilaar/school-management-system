@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="com.bean.Course" table="course">
+		<id name="id">
+			<generator class="increment"></generator>
+		</id>
+		<property name="name"></property>
+		<property name="detail"></property>
+		<set name="users" table="user_course" fetch="select" inverse="false" lazy="true" cascade="save-update">
+			<key>
+				<column name="course_id"></column>
+			</key>
+			<many-to-many entity-name="com.bean.User">
+				<column name="user_id"></column>
+			</many-to-many>
+		</set>
+		<set name="grades" table="grade" fetch="select" inverse="true" lazy="true" cascade="delete">
+			<key>
+				<column name="course_id"></column>
+			</key>
+			<one-to-many class="com.bean.Grade"/>
+		</set>
+		<set name="lessons" table="lesson" fetch="select" inverse="true" lazy="true" cascade="delete">
+			<key>
+				<column name="course_id"></column>
+			</key>
+			<one-to-many class="com.bean.Lesson"/>
+		</set>
+		<set name="announcements" table="announcement" fetch="select" inverse="true" lazy="true" cascade="delete">
+			<key>
+				<column name="course_id"></column>
+			</key>
+			<one-to-many class="com.bean.Announcement"/>
+		</set>
+		<set name="attachments" table="attachment" fetch="select" inverse="true" lazy="true" cascade="delete">
+			<key>
+				<column name="course_id"></column>
+			</key>
+			<one-to-many class="com.bean.Attachment"/>
+		</set>
+	</class>
+</hibernate-mapping>

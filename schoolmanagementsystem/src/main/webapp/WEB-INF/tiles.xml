@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN" "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+
+<!-- Index Definition -->
+	<definition name="base.definition" template="/WEB-INF/jsp/layout.jsp">
+		<put-attribute name="title" value="" />
+		<put-attribute name="header" value="/WEB-INF/jsp/header.jsp" />
+		<put-attribute name="body" value="" />
+		<put-attribute name="footer" value="/WEB-INF/jsp/footer.jsp" />
+	</definition>
+	
+	<definition name="index" extends="base.definition">
+		<put-attribute name="title" value="Main Portal" />
+		<put-attribute name="body" value="/WEB-INF/jsp/index.jsp" />
+	</definition>
+
+	<definition name="study-at-lokon" extends="base.definition">
+		<put-attribute name="title" value="Study at Lokon" />
+		<put-attribute name="body" value="/WEB-INF/jsp/study-at-lokon.jsp" />
+	</definition>
+
+	<definition name="about-us" extends="base.definition">
+		<put-attribute name="title" value="About Us" />
+		<put-attribute name="body" value="/WEB-INF/jsp/about-us.jsp" />
+	</definition>
+
+	<definition name="contact-us" extends="base.definition">
+		<put-attribute name="title" value="Contact Us" />
+		<put-attribute name="body" value="/WEB-INF/jsp/contact-us.jsp" />
+	</definition>
+
+	<definition name="research" extends="base.definition">
+		<put-attribute name="title" value="Research" />
+		<put-attribute name="body" value="/WEB-INF/jsp/research.jsp" />
+	</definition>
+
+	<definition name="awards" extends="base.definition">
+		<put-attribute name="title" value="Awards" />
+		<put-attribute name="body" value="/WEB-INF/jsp/awards.jsp" />
+	</definition>
+
+	<definition name="login" extends="base.definition">
+		<put-attribute name="title" value="Login" />
+		<put-attribute name="body" value="/WEB-INF/jsp/login.jsp" />
+	</definition>
+	
+
+<!-- Principal Definition -->
+	<definition name="principal.definition" template="/WEB-INF/jsp/layout.jsp">
+		<put-attribute name="title" value="" />
+		<put-attribute name="header" value="/WEB-INF/jsp/principal/header.jsp" />
+		<put-attribute name="body" value="" />
+		<put-attribute name="footer" value="/WEB-INF/jsp/user/footer.jsp" />
+	</definition>
+
+	<definition name="principal/homepage" extends="principal.definition">
+		<put-attribute name="title" value="Home Page" />
+		<put-attribute name="body" value="/WEB-INF/jsp/index.jsp" />
+	</definition>
+
+	<definition name="principal/manage-users" extends="principal.definition">
+		<put-attribute name="title" value="Manage Users" />
+		<put-attribute name="body" value="/WEB-INF/jsp/principal/manage-users.jsp" />
+	</definition>
+	
+	<definition name="principal/add-user" extends="principal.definition">
+		<put-attribute name="title" value="Add User" />
+		<put-attribute name="body" value="/WEB-INF/jsp/principal/add-user-form.jsp" />
+	</definition>
+	
+	<definition name="principal/update-user" extends="principal.definition">
+		<put-attribute name="title" value="Update User" />
+		<put-attribute name="body" value="/WEB-INF/jsp/principal/update-user.jsp" />
+	</definition>
+	
+	<definition name="principal/courses" extends="principal.definition">
+		<put-attribute name="title" value="List of Courses" />
+		<put-attribute name="body" value="/WEB-INF/jsp/principal/courses.jsp" />
+	</definition>
+	
+	<definition name="principal/add-course-form" extends="principal.definition">
+		<put-attribute name="title" value="New Course" />
+		<put-attribute name="body" value="/WEB-INF/jsp/principal/add-course-form.jsp" />
+	</definition>
+	
+	<definition name="principal/update-course" extends="principal.definition">
+		<put-attribute name="title" value="Update Course" />
+		<put-attribute name="body" value="/WEB-INF/jsp/principal/update-course.jsp" />
+	</definition>
+	
+	<definition name="principal/lessons" extends="principal.definition">
+		<put-attribute name="title" value="List of Lessons" />
+		<put-attribute name="body" value="/WEB-INF/jsp/principal/lessons.jsp" />
+	</definition>
+	
+	<definition name="principal/add-lesson-form" extends="principal.definition">
+		<put-attribute name="title" value="New Lesson" />
+		<put-attribute name="body" value="/WEB-INF/jsp/principal/add-lesson-form.jsp" />
+	</definition>
+	
+	<definition name="principal/update-lesson" extends="principal.definition">
+		<put-attribute name="title" value="Update Lesson" />
+		<put-attribute name="body" value="/WEB-INF/jsp/principal/update-lesson.jsp" />
+	</definition>
+
+	<definition name="principal/grades" extends="principal.definition">
+		<put-attribute name="title" value="Grades" />
+		<put-attribute name="body" value="/WEB-INF/jsp/principal/grades.jsp" />
+	</definition>
+
+	<definition name="principal/attendance" extends="principal.definition">
+		<put-attribute name="title" value="Attendance" />
+		<put-attribute name="body" value="/WEB-INF/jsp/principal/attendance.jsp" />
+	</definition>
+
+	<definition name="principal/announcements" extends="principal.definition">
+		<put-attribute name="title" value="Announcements" />
+		<put-attribute name="body" value="/WEB-INF/jsp/principal/announcements.jsp" />
+	</definition>
+	
+	<definition name="principal/profile" extends="principal.definition">
+		<put-attribute name="title" value="Profile" />
+		<put-attribute name="body" value="/WEB-INF/jsp/user/profile.jsp" />
+	</definition>
+	
+	<definition name="principal/update-profile" extends="principal.definition">
+		<put-attribute name="title" value="Update Profile" />
+		<put-attribute name="body" value="/WEB-INF/jsp/user/update-profile.jsp" />
+	</definition>
+
+
+<!-- Teacher Definition -->
+	<definition name="teacher.definition" template="/WEB-INF/jsp/layout.jsp">
+		<put-attribute name="title" value="" />
+		<put-attribute name="header" value="/WEB-INF/jsp/teacher/header.jsp" />
+		<put-attribute name="body" value="" />
+		<put-attribute name="footer" value="/WEB-INF/jsp/user/footer.jsp" />
+	</definition>
+
+	<definition name="teacher/homepage" extends="teacher.definition">
+		<put-attribute name="title" value="Home Page" />
+		<put-attribute name="body" value="/WEB-INF/jsp/index.jsp" />
+	</definition>
+
+	<definition name="teacher/student-details" extends="teacher.definition">
+		<put-attribute name="title" value="Student Details" />
+		<put-attribute name="body" value="/WEB-INF/jsp/teacher/student-details.jsp" />
+	</definition>
+	
+	<definition name="teacher/course-materials" extends="teacher.definition">
+		<put-attribute name="title" value="Course Materials" />
+		<put-attribute name="body" value="/WEB-INF/jsp/teacher/course-materials.jsp" />
+	</definition>
+	
+	<definition name="teacher/add-material" extends="teacher.definition">
+		<put-attribute name="title" value="Course Materials" />
+		<put-attribute name="body" value="/WEB-INF/jsp/teacher/add-material-form.jsp" />
+	</definition>
+	
+	<definition name="teacher/lessons" extends="teacher.definition">
+		<put-attribute name="title" value="Lessons" />
+		<put-attribute name="body" value="/WEB-INF/jsp/teacher/lessons.jsp" />
+	</definition>
+	
+	<definition name="teacher/update-attendance" extends="teacher.definition">
+		<put-attribute name="title" value="Update Attendance" />
+		<put-attribute name="body" value="/WEB-INF/jsp/teacher/update-attendance.jsp" />
+	</definition>
+
+	<definition name="teacher/grades" extends="teacher.definition">
+		<put-attribute name="title" value="Grades" />
+		<put-attribute name="body" value="/WEB-INF/jsp/teacher/grades.jsp" />
+	</definition>
+	
+	<definition name="teacher/update-grades" extends="teacher.definition">
+		<put-attribute name="title" value="Update Grades" />
+		<put-attribute name="body" value="/WEB-INF/jsp/teacher/update-grades.jsp" />
+	</definition>
+
+	<definition name="teacher/announcements" extends="teacher.definition">
+		<put-attribute name="title" value="Announcement" />
+		<put-attribute name="body" value="/WEB-INF/jsp/teacher/announcements.jsp" />
+	</definition>
+	
+	<definition name="teacher/add-announcement" extends="teacher.definition">
+		<put-attribute name="title" value="Announcement" />
+		<put-attribute name="body" value="/WEB-INF/jsp/teacher/add-announcement-form.jsp" />
+	</definition>
+	
+	<definition name="teacher/update-announcement" extends="teacher.definition">
+		<put-attribute name="title" value="Update Announcement" />
+		<put-attribute name="body" value="/WEB-INF/jsp/teacher/update-announcement.jsp" />
+	</definition>
+	
+	<definition name="teacher/profile" extends="teacher.definition">
+		<put-attribute name="title" value="Profile" />
+		<put-attribute name="body" value="/WEB-INF/jsp/user/profile.jsp" />
+	</definition>
+	
+	<definition name="teacher/update-profile" extends="teacher.definition">
+		<put-attribute name="title" value="Update Profile" />
+		<put-attribute name="body" value="/WEB-INF/jsp/user/update-profile.jsp" />
+	</definition>
+	
+<!-- Student Definition -->
+	<definition name="student.definition" template="/WEB-INF/jsp/layout.jsp">
+		<put-attribute name="title" value="" />
+		<put-attribute name="header" value="/WEB-INF/jsp/student/header.jsp" />
+		<put-attribute name="body" value="" />
+		<put-attribute name="footer" value="/WEB-INF/jsp/user/footer.jsp" />
+	</definition>
+
+	<definition name="student/homepage" extends="student.definition">
+		<put-attribute name="title" value="Home Page" />
+		<put-attribute name="body" value="/WEB-INF/jsp/index.jsp" />
+	</definition>
+
+	<definition name="student/course-materials" extends="student.definition">
+		<put-attribute name="title" value="Student Courses" />
+		<put-attribute name="body" value="/WEB-INF/jsp/student/course-materials.jsp" />
+	</definition>
+
+	<definition name="student/grades" extends="student.definition">
+		<put-attribute name="title" value="Grades" />
+		<put-attribute name="body" value="/WEB-INF/jsp/student/grades.jsp" />
+	</definition>
+
+	<definition name="student/attendance" extends="student.definition">
+		<put-attribute name="title" value="Attendance" />
+		<put-attribute name="body" value="/WEB-INF/jsp/student/attendance.jsp" />
+	</definition>
+
+	<definition name="student/announcements" extends="student.definition">
+		<put-attribute name="title" value="Announcement" />
+		<put-attribute name="body" value="/WEB-INF/jsp/student/announcements.jsp" />
+	</definition>
+	
+	<definition name="student/profile" extends="student.definition">
+		<put-attribute name="title" value="Profile" />
+		<put-attribute name="body" value="/WEB-INF/jsp/user/profile.jsp" />
+	</definition>
+	
+	<definition name="student/update-profile" extends="student.definition">
+		<put-attribute name="title" value="Update Profile" />
+		<put-attribute name="body" value="/WEB-INF/jsp/user/update-profile.jsp" />
+	</definition>
+</tiles-definitions>

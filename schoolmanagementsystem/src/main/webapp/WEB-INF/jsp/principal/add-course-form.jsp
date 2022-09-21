@@ -4,18 +4,21 @@
 <div class="container-fluid p-5" style="min-height:80vh; background-image:url('../resources/images/principal-background.jpg'); background-size:contain;">
 	<div class="container p-5 bg-light" style="min-height:65vh;">
 		<h3 class="text-center pt-3 pb-5">Add New Course</h3>
+		<c:if test="${fail == true}">
+			<div class="alert alert-danger col-6 mx-auto" role="alert">Course name already exist, please enter a different name!</div>
+		</c:if>
 		<form:form method="post" action="./add-course-submission" modelAttribute="course" class="needs-validation" novalidate="true">
 			<div class="row pb-3 justify-content-center">
 				<div class="col-6">
 					<label for="name" class="form-label fw-bolder">Name</label>
-					<form:input path="name" class="form-control" id="name" required="required"/>
+					<form:input path="name" class="form-control" id="name" maxlength="50" required="required"/>
 					<div class="invalid-feedback">Please enter Course Name</div>
 				</div>
 			</div>
 			<div class="row pb-3 justify-content-center">
 				<div class="col-6">
 					<label for="detail" class="form-label fw-bolder">Detail</label>
-					<form:textarea path="detail" class="form-control" id="detail" required="required"/>
+					<form:textarea path="detail" class="form-control" id="detail" maxlength="300" required="required"/>
 					<div class="invalid-feedback">Please enter Course Detail</div>
 				</div>
 			</div>

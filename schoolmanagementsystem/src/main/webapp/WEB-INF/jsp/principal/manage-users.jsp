@@ -38,7 +38,7 @@
 							<c:set var="userId" scope="page" value="${user.getId()}"/>
 							<c:set var="userName" scope="page" value="${user.getName()}"/>
 							<tr>
-								<th scope="row">${userType.getId()}</th>
+								<th scope="row">${user.getId()}</th>
 								<td>${user.getName()}</td>
 								<td>${user.getGender()}</td>
 								<td>${user.getDob()}</td>
@@ -49,7 +49,7 @@
 									<a class="btn btn-primary btn-sm col-4" href="./update-user?userId=${user.getId()}" type="button">Update</a>
 									<a class="btn btn-danger btn-sm col-4" data-bs-toggle="modal" data-bs-target="#modal"
 									data-bs-title="Delete User" data-bs-message="Are you sure you want to delete ${user.getName()}?"
-									data-bs-href="./delete-user?userId=${userType.getId()}" data-bs-submit="Delete" role="button">Delete</a>
+									data-bs-href="./delete-user?userId=${user.getId()}" data-bs-submit="Delete" role="button">Delete</a>
 								</td>
 							</tr>
 							</c:forEach>
@@ -71,5 +71,4 @@
 		$('#dataTable2').DataTable();
 		$('#dataTable3').DataTable();
 	}
-
 </script>

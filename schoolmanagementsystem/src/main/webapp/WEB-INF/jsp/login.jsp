@@ -6,10 +6,8 @@
 		<form:form method="post" action="login" modelAttribute="user" class="needs-validation" novalidate="true">
 			<img class="mb-5" src="<c:url value="/resources/images/logo.png"/>" alt="Lokon Academy" width="250px">
 			<c:if test="${fail == true}">
-			<div class="alert alert-danger" role="alert">
-			  Invalid Email and Password!
-			</div>
-		</c:if>
+				<div class="alert alert-danger" role="alert">Invalid Email and Password!</div>
+			</c:if>
 			<div class="form-floating">
 				<form:input path="email" type="email" class="form-control" placeholder="Email Address" required="required"/>
 				<label for="floatingInput">Email Address</label>

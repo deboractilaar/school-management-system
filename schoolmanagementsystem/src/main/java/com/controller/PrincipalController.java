@@ -1,5 +1,7 @@
 package com.controller;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bean.Announcement;
 import com.bean.Attendance;
@@ -101,10 +104,31 @@ public class PrincipalController {
 	}
 	
 	@RequestMapping(value={"/principal/add-user-submission"}, method={RequestMethod.POST})
-	public String addUserSubmit(@ModelAttribute("user") User user, Model model) {
-		user = courseDao.setCourseListbyUser(user);
-		userDao.saveUser(user);
-		return "redirect:./manage-users";
+	public String addUserSubmit(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
+		try {
+			if (user.getSelectedCourseIds() != null) {
+				user = courseDao.setCourseListbyUser(user);
+			}
+			userDao.saveUser(user);
+			if (user.getType().equals("Student")) {
+				for (Course course : user.getCourses()) {
+					for (Lesson lesson : lessonDao.getLessonListbyCourse(course)) {
+						if (lesson.getDate().toLocalDate().isAfter(LocalDate.now())) {
+							Attendance attendance = new Attendance();
+							attendance.setLesson(lesson);
+							attendance.setUser(user);
+							attendance.setValue("pending");
+							attendanceDao.saveAttendance(attendance);
+						}
+					}
+				}
+			}
+			return "redirect:./manage-users";
+		}
+		catch (Exception e) {
+			redirectAttributes.addFlashAttribute("fail", true);
+			return "redirect:./add-user";
+		}
 	}
 	
 	@RequestMapping(value={"/principal/update-user"})
@@ -118,18 +142,30 @@ public class PrincipalController {
 	}
 	
 	@RequestMapping(value={"/principal/update-user-submission"}, method={RequestMethod.POST})
-	public String updateUserSubmit(@ModelAttribute("user") User user, HttpServletRequest request, @RequestParam String action, Model model) {
-		user = courseDao.setCourseListbyUser(user);
-		userDao.updateUser(user);
-		System.out.println(action);
-		if (action.equals("profile")) {
-			return "redirect:./profile?action=profile";
+	public String updateUserSubmit(@ModelAttribute("user") User user, @RequestParam String action, RedirectAttributes redirectAttributes) {
+		try {
+			if (user.getSelectedCourseIds() != null) {
+				user = courseDao.setCourseListbyUser(user);
+			}
+			userDao.updateUser(user);
+			if (action.equals("profile")) {
+				return "redirect:./profile?action=profile";
+			}
+			return "redirect:./manage-users";
 		}
-		return "redirect:./manage-users";
+		catch (Exception e) {
+			redirectAttributes.addFlashAttribute("fail", true);
+			if (action.equals("profile")) {
+				return "redirect:./profile?action=update";
+			}
+			else {
+				return "redirect:./update-user?userId="+user.getId();
+			}
+		}
 	}
 	
 	@RequestMapping(value={"/principal/delete-user"})
-	public String deleteUser(@RequestParam int userId, Model model) {
+	public String deleteUser(@RequestParam int userId) {
 		User user = userDao.getUserbyId(userId);
 		userDao.deleteUser(user);
 		return "redirect:./manage-users";
@@ -150,9 +186,15 @@ public class PrincipalController {
 	}
 	
 	@RequestMapping(value={"/principal/add-course-submission"}, method={RequestMethod.POST})
-	public String addCourseSubmit(@ModelAttribute("course") Course course, Model model) {
-		courseDao.saveCourse(course);
-		return "redirect:./courses";
+	public String addCourseSubmit(@ModelAttribute("course") Course course, RedirectAttributes redirectAttributes) {
+		try {
+			courseDao.saveCourse(course);
+			return "redirect:./courses";
+		}
+		catch (Exception e) {
+			redirectAttributes.addFlashAttribute("fail", true);
+			return "redirect:./add-course";
+		}
 	}
 	
 	@RequestMapping(value={"/principal/update-course"})
@@ -163,10 +205,16 @@ public class PrincipalController {
 	}
 	
 	@RequestMapping(value={"/principal/update-course-submission"}, method={RequestMethod.POST})
-	public String updateCourseSubmit(@ModelAttribute("course") Course course, Model model) {
-		course.setUsers(userDao.getUserListbyCourse(course));
-		courseDao.updateCourse(course);
-		return "redirect:./courses";
+	public String updateCourseSubmit(@ModelAttribute("course") Course course, RedirectAttributes redirectAttributes) {
+		try {
+			course.setUsers(userDao.getUserListbyCourse(course));
+			courseDao.updateCourse(course);
+			return "redirect:./courses";
+		}
+		catch (Exception e) {
+			redirectAttributes.addFlashAttribute("fail", true);
+			return "redirect:./update-course?courseId="+course.getId();
+		}
 	}
 	
 	@RequestMapping(value={"/principal/delete-course"})
@@ -196,18 +244,47 @@ public class PrincipalController {
 	}
 	
 	@RequestMapping(value={"/principal/add-lesson-submission"}, method={RequestMethod.POST})
-	public String addLessonSubmit(HttpServletRequest request, @ModelAttribute("lesson") Lesson lesson, Model model) {
-		lessonDao.saveLesson(lesson);
-		Course course = courseDao.getCoursebyId(lesson.getCourse().getId());
-		Set<User> studentList = userDao.getStudentListbyCourse(course);
-		for (User student : studentList) {
-			Attendance attendance = new Attendance();
-			attendance.setLesson(lesson);
-			attendance.setUser(student);
-			attendance.setValue("pending");
-			attendanceDao.saveAttendance(attendance);
+	public String addLessonSubmit(@ModelAttribute("lesson") Lesson lesson, RedirectAttributes redirectAttributes) {
+		boolean available = false;
+		LocalTime newStartTime = lesson.getStartTime().toLocalTime();
+		LocalTime newEndTime = lesson.getEndTime().toLocalTime();
+		Set<Lesson> lessonList = lessonDao.getLessonListbyDateClassRoom(lesson);
+		if (!lessonList.isEmpty()) {
+			for (Lesson lssn :  lessonList) {
+				LocalTime lessonStartTime = lssn.getStartTime().toLocalTime();
+				LocalTime lessonEndTime = lssn.getEndTime().toLocalTime();
+				if (!(
+						((newStartTime.isAfter(lessonStartTime) || newStartTime.equals(lessonStartTime)) && newStartTime.isBefore(lessonEndTime)) || 
+						(newEndTime.isAfter(lessonStartTime) && (newEndTime.isBefore(lessonEndTime) || newEndTime.equals(lessonEndTime))) ||
+						((lessonStartTime.isAfter(newStartTime) || lessonStartTime.equals(newStartTime)) && lessonStartTime.isBefore(newEndTime)) || 
+						(lessonEndTime.isAfter(newStartTime) && (lessonEndTime.isBefore(newEndTime) || lessonEndTime.equals(newEndTime)))
+						)) {
+					available = true;
+				}
+			}
 		}
-		return "redirect:./lessons";
+		else {
+			available = true;
+		}
+		
+		if (available) {
+			lessonDao.saveLesson(lesson);
+			Course course = courseDao.getCoursebyId(lesson.getCourse().getId());
+			Set<User> studentList = userDao.getStudentListbyCourse(course);
+			for (User student : studentList) {
+				Attendance attendance = new Attendance();
+				attendance.setLesson(lesson);
+				attendance.setUser(student);
+				attendance.setValue("pending");
+				attendanceDao.saveAttendance(attendance);
+				return "redirect:./lessons";
+			}
+		}
+		else {
+		redirectAttributes.addFlashAttribute("fail", true);
+		return "redirect:./add-lesson";
+		}
+		return null;
 	}
 	
 	@RequestMapping(value={"/principal/update-lesson"})
@@ -220,13 +297,13 @@ public class PrincipalController {
 	}
 	
 	@RequestMapping(value={"/principal/update-lesson-submission"}, method={RequestMethod.POST})
-	public String updateCourseSubmit(@ModelAttribute("lesson") Lesson lesson, Model model) {
+	public String updateCourseSubmit(@ModelAttribute("lesson") Lesson lesson) {
 		lessonDao.updateLesson(lesson);
 		return "redirect:./lessons";
 	}
 	
 	@RequestMapping(value={"/principal/delete-lesson"})
-	public String deleteLesson(@RequestParam int lessonId, Model model) {
+	public String deleteLesson(@RequestParam int lessonId) {
 		Lesson lesson = lessonDao.getLessonbyId(lessonId);
 		lessonDao.deleteLesson(lesson);
 		return "redirect:./lessons";
@@ -258,8 +335,6 @@ public class PrincipalController {
 			}
 		}
 		model.addAttribute("courseList", courseList);
-		//List<Attendance> attendanceList = attendanceDao.attendanceList();
-		//model.addAttribute("attendanceList", attendanceList);
 		return "principal/attendance";
 	}
 	

@@ -60,4 +60,18 @@ public class LessonDao {
 		});
 		return list;
 	}
+	
+	public Set<Lesson> getLessonListbyDateClassRoom(final Lesson lesson) {
+		Set<Lesson> list = template.execute(new HibernateCallback<Set<Lesson>>() {
+			@Override
+			public Set<Lesson> doInHibernate(Session session) throws HibernateException {
+				TypedQuery<Lesson> query = session.createQuery("select l from Lesson l where l.date=:lessonDate and l.classRoom=:lessonClassRoom", Lesson.class);
+				query.setParameter("lessonDate", lesson.getDate());
+				query.setParameter("lessonClassRoom", lesson.getClassRoom());
+				Set<Lesson> lessons = new LinkedHashSet<Lesson>(query.getResultList());
+				return lessons;
+			}
+		});
+		return list;
+	}
 }

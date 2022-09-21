@@ -14,7 +14,7 @@
 				</div>
 				<div class="col-3">
 					<label for="classRoom" class="form-label fw-bolder">Class Room</label>
-					<form:input path="classRoom" class="form-control" id="classRoom" required="required"/>
+					<form:input path="classRoom" class="form-control" id="classRoom" maxlength="20" required="required"/>
 					<div class="invalid-feedback">Please enter Class Room Detail</div>
 				</div>
 			</div>

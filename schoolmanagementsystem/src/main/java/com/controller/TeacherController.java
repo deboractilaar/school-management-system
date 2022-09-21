@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bean.Announcement;
 import com.bean.Attachment;
@@ -105,7 +106,7 @@ public class TeacherController {
 	}
 	
 	@RequestMapping(value={"/teacher/add-material-submission"}, method={RequestMethod.POST}, consumes={MediaType.MULTIPART_FORM_DATA_VALUE})
-	public String addAttachmentSubmit(HttpServletRequest request, @ModelAttribute("attachment") Attachment attachment, Model model, @RequestParam("submit") String submit, @RequestPart("file") MultipartFile[] files) throws IOException {
+	public String addAttachmentSubmit(@ModelAttribute("attachment") Attachment attachment, @RequestPart("file") MultipartFile[] files) throws IOException {
 		for (MultipartFile file : files) {
 			attachment.setInputStream(file.getInputStream());
 			attachment.setFileSize(file.getSize());
@@ -117,7 +118,7 @@ public class TeacherController {
 	}
 	
 	@RequestMapping(value={"/teacher/delete-material"})
-	public String deleteAttachment(HttpServletRequest request, @RequestParam int attachmentId, Model model) {
+	public String deleteAttachment(@RequestParam int attachmentId) {
 		Attachment attachment = attachmentDao.getAttachmentbyId(attachmentId);
 		attachmentDao.deleteAttachment(attachment);
 		return "redirect:./course-materials";
@@ -153,7 +154,7 @@ public class TeacherController {
 	}
 
 	@RequestMapping(value={"/teacher/update-attendance-submission"}, method={RequestMethod.POST})
-	public String updateAttendanceSubmit(HttpServletRequest request, @ModelAttribute("lesson") Lesson lesson, Model model) {
+	public String updateAttendanceSubmit(@ModelAttribute("lesson") Lesson lesson) {
 		for (Attendance attendance : lesson.getAttendanceList()) {
 			if (attendance.getValue() == null) {
 				attendance.setValue("pending");
@@ -200,7 +201,7 @@ public class TeacherController {
 	}
 	
 	@RequestMapping(value={"/teacher/update-grades-submission"}, method={RequestMethod.POST})
-	public String updateGradesSubmit(HttpServletRequest request, @ModelAttribute("course") Course course, Model model) {
+	public String updateGradesSubmit(@ModelAttribute("course") Course course) {
 		for (User student : course.getStudentList()) {
 			gradeDao.updateGrade(student.getGrade());
 		}
@@ -215,15 +216,6 @@ public class TeacherController {
 		for (Course course : courseList) {
 			course.setAnnouncements(announcementDao.getAnnouncementListbyCourse(course));
 		}
-		/*HashMap<String, List<Announcement>> announcementList = new HashMap<String, List<Announcement>>();
-		for (Course course : courseList) {
-			announcementList.put(course.getName(), announcementDao.announcementListbyCourse(course));
-		}
-		Announcement announcement = new Announcement();
-		announcement.setTeacher(user);
-		model.addAttribute("announcementList", announcementList);
-		model.addAttribute("announcement", announcement);
-		model.addAttribute("teacher", user);*/
 		model.addAttribute("courseList", courseList);
 		return "teacher/announcements";
 	}
@@ -240,7 +232,7 @@ public class TeacherController {
 	}
 	
 	@RequestMapping(value={"/teacher/add-announcement-submission"}, method={RequestMethod.POST})
-	public String addAnnouncementSubmit(@ModelAttribute("announcement") Announcement announcement, HttpServletRequest request, Model model) {
+	public String addAnnouncementSubmit(@ModelAttribute("announcement") Announcement announcement) {
 		announcementDao.saveAnnouncement(announcement);
 		return "redirect:./announcements";
 	}
@@ -255,13 +247,13 @@ public class TeacherController {
 	}
 	
 	@RequestMapping(value={"/teacher/update-announcement-submission"}, method={RequestMethod.POST})
-	public String updateAnnouncementSubmit(@ModelAttribute("announcement") Announcement announcement, HttpServletRequest request, Model model) {;
+	public String updateAnnouncementSubmit(@ModelAttribute("announcement") Announcement announcement) {;
 		announcementDao.updateAnnouncement(announcement);
 		return "redirect:./announcements";
 	}
 	
 	@RequestMapping(value={"/teacher/delete-announcement"})
-	public String deleteAnnouncement(@RequestParam int announcementId, HttpServletRequest request, Model model) {
+	public String deleteAnnouncement(@RequestParam int announcementId) {
 		Announcement announcement = announcementDao.getAnnouncementbyId(announcementId);
 		announcementDao.deleteAnnouncement(announcement);
 		return "redirect:./announcements";
@@ -280,9 +272,17 @@ public class TeacherController {
 	}
 	
 	@RequestMapping(value={"/teacher/update-user-submission"}, method={RequestMethod.POST})
-	public String updateUserSubmit(@ModelAttribute("user") User user, HttpServletRequest request, @RequestParam String action, Model model) {
-		user = courseDao.setCourseListbyUser(user);
-		userDao.updateUser(user);
-		return "redirect:./profile?action=profile";
+	public String updateUserSubmit(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
+		try {
+			if (user.getSelectedCourseIds() != null) {
+				user = courseDao.setCourseListbyUser(user);
+			}
+			userDao.updateUser(user);
+			return "redirect:./profile?action=profile";
+		}
+		catch (Exception e) {
+			redirectAttributes.addFlashAttribute("fail", true);
+			return "redirect:./profile?action=update";
+		}
 	}
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bean.Announcement;
 import com.bean.Attendance;
@@ -98,7 +99,7 @@ public class StudentController {
 		for (Course course : courseList) {
 			course.setLessons(lessonDao.getLessonListbyCourse(course));
 			for (Lesson lesson : course.getLessons()) {
-				lesson.setAttendances(attendanceDao.getAttendanceListbyLesson(lesson));
+				lesson.setAttendances(attendanceDao.getAttendanceListbyLessonStudent(lesson, student));
 				for (Attendance attendance : lesson.getAttendances()) {
 					attendance.setUser(userDao.getUserbyId(attendance.getUser().getId()));
 				}
@@ -136,9 +137,17 @@ public class StudentController {
 	}
 	
 	@RequestMapping(value={"/student/update-user-submission"}, method={RequestMethod.POST})
-	public String updateUserSubmit(@ModelAttribute("user") User user, HttpServletRequest request, @RequestParam String action, Model model) {
-		user = courseDao.setCourseListbyUser(user);
-		userDao.updateUser(user);
-		return "redirect:./profile?action=profile";
+	public String updateUserSubmit(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
+		try {
+			if (user.getSelectedCourseIds() != null) {
+				user = courseDao.setCourseListbyUser(user);
+			}
+			userDao.updateUser(user);
+			return "redirect:./profile?action=profile";
+		}
+		catch (Exception e) {
+			redirectAttributes.addFlashAttribute("fail", true);
+			return "redirect:./profile?action=update";
+		}
 	}
 }

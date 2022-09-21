@@ -4,6 +4,9 @@
 <div class="container-fluid p-5" style="min-height:80vh; background-image:url('../resources/images/principal-background.jpg'); background-size:contain;">
 	<div class="container p-5 bg-light" style="min-height:65vh;">
 		<h3 class="text-center pt-3 pb-5">Add New Lesson</h3>
+		<c:if test="${fail == true}">
+			<div class="alert alert-danger col-6 mx-auto" role="alert">Class room is not available on the selected time, please enter a different timing!</div>
+		</c:if>
 		<form:form method="post" action="./add-lesson-submission" modelAttribute="lesson" class="needs-validation" novalidate="true">
 			<div class="row pb-3 justify-content-center">
 				<div class="col-3">
@@ -13,7 +16,7 @@
 				</div>
 				<div class="col-3">
 					<label for="classRoom" class="form-label fw-bolder">Class Room</label>
-					<form:input path="classRoom" class="form-control" id="classRoom" required="required"/>
+					<form:input path="classRoom" class="form-control" id="classRoom" maxlength="20" required="required"/>
 					<div class="invalid-feedback">Please enter Class Room Detail</div>
 				</div>
 			</div>

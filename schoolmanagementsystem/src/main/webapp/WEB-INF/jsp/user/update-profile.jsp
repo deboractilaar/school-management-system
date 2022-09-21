@@ -1,16 +1,21 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <div class="container-fluid p-5" style="min-height:80vh; background-image:url('../resources/images/principal-background.jpg'); background-size:contain;">
 	<div class="container p-5 bg-light" style="min-height:65vh;">
 		<h3 class="text-center pt-3 pb-5">Update Profile</h3>
+		<c:if test="${fail == true}">
+			<div class="alert alert-danger col-6 mx-auto" role="alert">Email already exist, please enter a different email!</div>
+		</c:if>
 		<form:form method="post" action="./update-user-submission?action=profile" modelAttribute="user" class="needs-validation" novalidate="true">
 		<form:hidden path="id"/>
+		<form:hidden path="email"/>
 		<form:hidden path="type"/>
 		<form:hidden path="selectedCourseIds"/>
 		<div class="row pb-3 justify-content-center">
 			<div class="col-6">
 				<label for="name" class="form-label fw-bolder">Name</label>
-				<form:input path="name" class="form-control" id="name" required="required"/>
+				<form:input path="name" class="form-control" id="name" maxlength="50" required="required"/>
 				<div class="invalid-feedback">Please enter Full Name</div>
 			</div>
 			<div class="col-3">
@@ -33,9 +38,9 @@
 		</div>
 		<div class="row pb-3 justify-content-center">
 			<div class="col-6">
-				<label for="email" class="form-label fw-bolder">Email</label>
-				<form:input path="email" class="form-control" id="email" required="required"/>
-				<div class="invalid-feedback">Please enter Email Address</div>
+				<label for="address" class="form-label fw-bolder">Address</label>
+				<form:input path="address" class="form-control" id="address" maxlength="100" required="required"/>
+				<div class="invalid-feedback">Please enter Address Detail</div>
 			</div>
 			<div class="col-3">
 				<label for="dob" class="form-label fw-bolder">Date of Birth</label>
@@ -45,23 +50,15 @@
 		</div>
 		<div class="row pb-3 justify-content-center">
 			<div class="col-6">
-				<label for="address" class="form-label fw-bolder">Address</label>
-				<form:input path="address" class="form-control" id="address" required="required"/>
-				<div class="invalid-feedback">Please enter Address Detail</div>
+				<label for="password" class="form-label fw-bolder">Password</label>
+				<form:input path="password" class="form-control" id="password" maxlength="20" required="required"/>
+				<div class="invalid-feedback">Please enter Password</div>
 			</div>
 			<div class="col-3">
 				<label for="phone" class="form-label fw-bolder">Contact Number</label>
-				<form:input path="phone" class="form-control" id="phone" required="required"/>
+				<form:input path="phone" class="form-control" id="phone" maxlength="20" required="required"/>
 				<div class="invalid-feedback">Please enter Phone Number</div>
 			</div>
-		</div>
-		<div class="row pb-3 justify-content-center">
-			<div class="col-6">
-				<label for="password" class="form-label fw-bolder">Password</label>
-				<form:input path="password" class="form-control" id="password" required="required"/>
-				<div class="invalid-feedback">Please enter Password</div>
-			</div>
-			<div class="col-3"></div>
 		</div>
 		<div class="d-grid col-2 mx-auto py-3 d-md-block">
 			<button class="btn btn-primary col-5" type="submit" name="submit">Update</button>

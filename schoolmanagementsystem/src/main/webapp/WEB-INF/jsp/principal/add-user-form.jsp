@@ -4,11 +4,14 @@
 <div class="container-fluid p-5" style="min-height:80vh; background-image:url('../resources/images/principal-background.jpg'); background-size:contain;">
 	<div class="container p-5 bg-light" style="min-height:65vh;">
 		<h3 class="text-center pt-3 pb-5">Add New User</h3>
+		<c:if test="${fail == true}">
+			<div class="alert alert-danger col-6 mx-auto" role="alert">Email already exist, please enter a different email!</div>
+		</c:if>
 		<form:form method="post" action="./add-user-submission" modelAttribute="user" class="needs-validation" novalidate="true">
 		<div class="row pb-3 justify-content-center">
 			<div class="col-4">
 				<label for="name" class="form-label fw-bolder">Name</label>
-				<form:input path="name" class="form-control" id="name" required="required"/>
+				<form:input path="name" class="form-control" id="name" maxlength="50" required="required"/>
 				<div class="invalid-feedback">Please enter Full Name</div>
 			</div>
 			<div class="col-2">
@@ -32,7 +35,7 @@
 		<div class="row pb-3 justify-content-center">
 			<div class="col-4">
 				<label for="email" class="form-label fw-bolder">Email</label>
-				<form:input path="email" class="form-control" id="email" required="required"/>
+				<form:input path="email" class="form-control" id="email" maxlength="60" required="required"/>
 				<div class="invalid-feedback">Please enter Email Address</div>
 			</div>
 			<div class="col-2">
@@ -44,19 +47,19 @@
 		<div class="row pb-3 justify-content-center">
 			<div class="col-4">
 				<label for="address" class="form-label fw-bolder">Address</label>
-				<form:input path="address" class="form-control" id="address" required="required"/>
+				<form:input path="address" class="form-control" id="address" maxlength="100" required="required"/>
 				<div class="invalid-feedback">Please enter Address Detail</div>
 			</div>
 			<div class="col-2">
 				<label for="phone" class="form-label fw-bolder">Contact Number</label>
-				<form:input path="phone" class="form-control" id="phone" required="required"/>
+				<form:input path="phone" class="form-control" id="phone" maxlength="20" required="required"/>
 				<div class="invalid-feedback">Please enter Phone Number</div>
 			</div>
 		</div>
 		<div class="row pb-3 justify-content-center">
 			<div class="col-4">
 				<label for="password" class="form-label fw-bolder">Password</label>
-				<form:input path="password" class="form-control" id="password" required="required"/>
+				<form:input path="password" class="form-control" id="password" maxlength="20" required="required"/>
 				<div class="invalid-feedback">Please enter Password</div>
 			</div>
 			<div class="col-2">

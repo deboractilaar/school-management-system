@@ -19,14 +19,14 @@
 			<div class="row pb-3 justify-content-center">
 				<div class="col-6">
 					<label for="title" class="form-label fw-bolder">Title</label>
-					<form:input path="title" class="form-control" id="title" required="required"/>
+					<form:input path="title" class="form-control" id="title" maxlength="100" required="required"/>
 					<div class="invalid-feedback">Please enter Announcement Title</div>
 				</div>
 			</div>
 			<div class="row pb-3 justify-content-center">
 				<div class="col-6">
 					<label for="detail" class="form-label fw-bolder">Details</label>
-					<form:textarea path="detail" class="form-control" id="detail" rows="5" required="required"/>
+					<form:textarea path="detail" class="form-control" id="detail" rows="5" maxlength="300" required="required"/>
 					<div class="invalid-feedback">Please enter Announcement Detail</div>
 				</div>
 			</div>

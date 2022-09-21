@@ -30,7 +30,7 @@
 								<c:forEach var="lesson" items="${course.getLessons()}" varStatus="lessonLoop">
 									<c:forEach var="attendance" items="${lesson.getAttendances()}" varStatus="attendanceLoop">
 									<tr>
-										<th scope="row">${attendanceLoop.index+1}</th>
+										<th scope="row">${lessonLoop.index+1}</th>
 										<td>${lesson.getDate()}</td>
 										<td>${attendance.getValue()}</td>
 									</tr>

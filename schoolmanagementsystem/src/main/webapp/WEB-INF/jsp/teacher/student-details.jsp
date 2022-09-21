@@ -4,16 +4,16 @@
 	<div class="container p-5 bg-light" style="min-height:65vh;">
 		<h3 class="text-center pt-3 pb-5">List of Students</h3>
 		<ul class="nav nav-tabs" id="myTab" role="tablist">
-			<c:forEach var="course" items="${courseList}" varStatus="loop">
+			<c:forEach var="course" items="${courseList}" varStatus="courseloop">
 				<li class="nav-item" role="presentation">
-					<button class="nav-link <c:if test = "${loop.index == 0}"> active</c:if>" id="${course.getName()}-tab" data-bs-toggle="tab" data-bs-target="#${course.getName()}" type="button" role="tab" aria-controls="${course.getName()}" aria-selected="true">${course.getName()}</button>
+					<button class="nav-link <c:if test = "${courseloop.index == 0}"> active</c:if>" id="${course.getName()}-tab" data-bs-toggle="tab" data-bs-target="#${course.getName()}" type="button" role="tab" aria-controls="${course.getName()}" aria-selected="true" onclick="dataTable()">${course.getName()}</button>
 				</li>
 			</c:forEach>
 		</ul>
 		<div class="tab-content" id="myTabContent">
-			<c:forEach var="course" items="${courseList}" varStatus="loop">
-				<div class="tab-pane fade <c:if test = "${loop.index == 0}"> show active</c:if> py-4" id="${course.getName()}" role="tabpanel" aria-labelledby="${course.getName()}-tab">
-					<table class="table" id="dataTable">
+			<c:forEach var="course" items="${courseList}" varStatus="courseloop">
+				<div class="tab-pane fade <c:if test = "${courseloop.index == 0}"> show active</c:if> py-4" id="${course.getName()}" role="tabpanel" aria-labelledby="${course.getName()}-tab">
+					<table class="table" id="dataTable${courseloop.index+1}">
 						<thead>
 							<tr>
 								<th scope="col">ID</th>
@@ -46,7 +46,13 @@
 </div>
 
 <script>
-$(document).ready(function () {
-    $('#dataTable').DataTable();
-});
+	$(document).ready(function () {
+		$('#dataTable1').DataTable();
+	});
+	
+	function dataTable() {
+		$('#dataTable1').DataTable();
+		$('#dataTable2').DataTable();
+		$('#dataTable3').DataTable();
+	}
 </script>

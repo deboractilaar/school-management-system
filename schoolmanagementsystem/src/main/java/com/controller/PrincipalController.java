@@ -245,7 +245,7 @@ public class PrincipalController {
 	
 	@RequestMapping(value={"/principal/add-lesson-submission"}, method={RequestMethod.POST})
 	public String addLessonSubmit(@ModelAttribute("lesson") Lesson lesson, RedirectAttributes redirectAttributes) {
-		boolean available = false;
+		boolean available = true;
 		LocalTime newStartTime = lesson.getStartTime().toLocalTime();
 		LocalTime newEndTime = lesson.getEndTime().toLocalTime();
 		Set<Lesson> lessonList = lessonDao.getLessonListbyDateClassRoom(lesson);
@@ -253,18 +253,16 @@ public class PrincipalController {
 			for (Lesson lssn :  lessonList) {
 				LocalTime lessonStartTime = lssn.getStartTime().toLocalTime();
 				LocalTime lessonEndTime = lssn.getEndTime().toLocalTime();
-				if (!(
+				if ((
 						((newStartTime.isAfter(lessonStartTime) || newStartTime.equals(lessonStartTime)) && newStartTime.isBefore(lessonEndTime)) || 
 						(newEndTime.isAfter(lessonStartTime) && (newEndTime.isBefore(lessonEndTime) || newEndTime.equals(lessonEndTime))) ||
 						((lessonStartTime.isAfter(newStartTime) || lessonStartTime.equals(newStartTime)) && lessonStartTime.isBefore(newEndTime)) || 
 						(lessonEndTime.isAfter(newStartTime) && (lessonEndTime.isBefore(newEndTime) || lessonEndTime.equals(newEndTime)))
 						)) {
-					available = true;
+					available = false;
+					break;
 				}
 			}
-		}
-		else {
-			available = true;
 		}
 		
 		if (available) {
